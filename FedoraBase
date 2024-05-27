@@ -1,0 +1,4 @@
+# Base Fedora 40, with updates
+FROM quay.io/fedora/fedora:40@sha256:a0dcdeba16a33944d65fd5e8b7c3e082181107a7fa7642b4292e57af6deccd41
+RUN dnf -y update
+# Not cleaning up the dnf cache to speedup derived images

@@ -1,0 +1,11 @@
+# This particular image is only an intermediate build step which we use to build the final containers:
+# therefore it's not optimised for size but for our convenience.
+FROM localhost/fedora-base:latest
+RUN dnf -y install git maven java-22-openjdk-devel gcc autoconf automake binutils glibc-devel make libtool pkgconf unzip zip gcc-c++ alsa-lib-devel cups-devel fontconfig-devel libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel --nodocs
+#Intentionally not cleaning the dnf metadata to allow more efficient follow-up operations
+COPY --chown=1001 bootstrap-measure/ /quarkus/
+WORKDIR "/quarkus"
+# This is to fill the Maven cache with core artifacts from this particular version of Quarkus we're targeting
+RUN mvn package
+#Now reset the workdir to default, otherwise it might be confusing when maintaining downstream builds:
+WORKDIR "/"

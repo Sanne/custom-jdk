@@ -9,20 +9,20 @@ RUN bash configure --disable-warnings-as-errors --disable-jvm-feature-parallelgc
 RUN make images
 
 FROM quay.io/fedora/fedora:40
-RUN dnf -y update; dnf -y install git --nodocs; dnf -y clean all
+##TODO remove git:
+RUN dnf -y update; dnf -y install git maven --nodocs; dnf -y clean all
 COPY --from=0 /leyden/build/linux-x86_64-server-release/images/jdk /leyden-openjdk
 WORKDIR "/leyden-openjdk/bin"
 RUN ./java --version
 RUN mkdir -p "/quarkus"
 WORKDIR "/quarkus"
-RUN git clone --branch main --depth 1 https://github.com/quarkusio/quarkus-quickstarts.git
-WORKDIR "/quarkus/quarkus-quickstarts/getting-started"
+COPY --chown=1001 bootstrap-measure/ /quarkus/
 ENV JAVA_HOME=/leyden-openjdk
 ENV JDK_HOME=$JAVA_HOME
 ENV JAVA_BINDIR=$JAVA_HOME"/bin"
 ENV JAVA_ROOT=$JAVA_HOME
 ENV PATH=$JAVA_BINDIR:$PATH
-RUN ./mvnw package
+RUN mvn package
 EXPOSE 8080
 USER 1001
-ENTRYPOINT [ "java", "-jar", "target/quarkus-app/quarkus-run.jar" ]
+ENTRYPOINT [ "java", "-jar", "target/quarkus-app/quarkus-run.jar", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" ]
