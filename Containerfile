@@ -23,3 +23,6 @@ ENV JAVA_BINDIR=$JAVA_HOME"/bin"
 ENV JAVA_ROOT=$JAVA_HOME
 ENV PATH=$JAVA_BINDIR:$PATH
 RUN ./mvnw package
+EXPOSE 8080
+USER 1001
+ENTRYPOINT [ "java", "-jar", "target/quarkus-app/quarkus-run.jar" ]
