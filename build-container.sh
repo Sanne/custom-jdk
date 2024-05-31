@@ -1,28 +1,19 @@
 #!/usr/bin/env bash
 
-#Build the fedora base image:
+#Build the fedora base image, an up to date Fedora 40 with no extras:
 buildah build --cache-ttl=480h --pull=missing --layers -f FedoraBase -t fedora-base .
 
-#Build the fedora-full base image:
-buildah build --cache-ttl=480h --pull=missing --layers -f BeefyContainerfile -t fedora-full .
+#Build the "fedora with dev tools" base image:
+buildah build --cache-ttl=480h --pull=missing --layers -f FedoraWithDevTools -t fedora-with-dev .
 
-#Can check it via something like:
-#podman run -it localhost/fedora-full:latest bash
+#Can enter its shell to (optionally) inspect the container with:
+#podman run -it localhost/fedora-with-dev bash
 
 #Build Leyden JDK, latest from premain branch:
 buildah build --cache-ttl=480h --pull=missing --layers -f LeydenBuildContainerfile -t leyden-build .
 
 #Can check it via something like (should print out the Java version of Leyden):
-podman run -it localhost/leyden-build:latest
-
-leydenbuild=$(buildah from localhost/leyden-build:latest)
-echo "Leyden build container is $leydenbuild"
-fedorabase=$(buildah from localhost/fedora-full:latest)
-echo "Fedora base container is $fedorabase"
-
-leydenbuildmount=$(buildah mount $leydenbuild)
-ls $leydenbuildmount/leyden/build/linux-x86_64-server-release/images/jdk
-
+#podman run -it localhost/leyden-build:latest bash
 
 #fedorafull=$(buildah build --cache-ttl=480h --pull=missing --layers -f BeefyContainerfile -t fedora-full .)
 

@@ -1,4 +1,4 @@
-FROM localhost/fedora-full:latest
+FROM localhost/fedora-with-dev:latest
 WORKDIR "/"
 # The "rand1" option should have no impact: useful to invalidate this line from various local build caches.
 RUN git clone -o rand4 --branch premain --depth 1 https://github.com/openjdk/leyden.git
@@ -8,5 +8,11 @@ RUN bash configure --disable-warnings-as-errors --disable-jvm-feature-parallelgc
 #TODO: use also configure --with-classpath, modules, jlink
 RUN make images
 WORKDIR "/leyden/build/linux-x86_64-server-release/images/jdk"
-
 ENTRYPOINT ["/leyden/build/linux-x86_64-server-release/images/jdk/bin/java", "-version"]
+
+FROM localhost/fedora-with-dev:latest
+COPY --from=0 /leyden/build/linux-x86_64-server-release/images/jdk /leyden-openjdk
+WORKDIR "/quarkus-standard-warmup"
+RUN ./produce-cds-archive.sh
+RUN ls /leyden-openjdk
+

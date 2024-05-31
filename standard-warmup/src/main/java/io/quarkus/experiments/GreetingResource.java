@@ -13,4 +13,22 @@ public class GreetingResource {
     public String hello() {
         return "Hello from Quarkus REST";
     }
+
+    @Path( "quit" )
+    @Produces((MediaType.TEXT_PLAIN))
+    public String quit() {
+        new Thread() {
+            public void run() {
+				try {
+					Thread.sleep( 200 );
+				}
+				catch (InterruptedException e) {
+					throw new RuntimeException( e );
+				}
+				System.out.println("Shutting down");
+                System.exit( 0 );
+			}
+        }.start();
+        return "Quit from Quarkus REST";
+    }
 }
