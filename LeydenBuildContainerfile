@@ -15,4 +15,10 @@ COPY --from=0 /leyden/build/linux-x86_64-server-release/images/jdk /leyden-openj
 WORKDIR "/quarkus-standard-warmup"
 RUN ./produce-cds-archive.sh
 RUN ls /leyden-openjdk
+WORKDIR "/quarkus-boot-measure"
 
+EXPOSE 8080
+USER 1001
+
+#For diagnostics might want to use also -Xlog:cds -Xlog:scc :
+ENTRYPOINT ["/leyden-openjdk/bin/java", "-XX:CacheDataStore=/leyden-openjdk/quarkus-generic-cds.cds", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
