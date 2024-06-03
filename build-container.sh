@@ -12,6 +12,8 @@ buildah build --cache-ttl=480h --pull=missing --layers -f FedoraWithDevTools -t 
 #Build Leyden JDK, latest from premain branch:
 buildah build --cache-ttl=480h --pull=missing --layers -f LeydenBuildContainerfile -t leyden-build .
 
+buildah build --cache-ttl=480h --pull=missing --layers -f BaselineBootstrap -t baseline-boot .
+
 #Bootstrap the Quarkus app using the CDS+Leyden archives:
 #podman run -it localhost/leyden-build:latest
 echo "Now run>  podman run -it localhost/leyden-build:latest"

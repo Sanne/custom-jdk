@@ -1,0 +1,7 @@
+FROM localhost/fedora-with-dev:latest
+WORKDIR "/quarkus-boot-measure"
+
+EXPOSE 8080
+USER 1001
+
+ENTRYPOINT ["java", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
