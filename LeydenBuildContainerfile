@@ -5,7 +5,7 @@ RUN git clone -o rand4 --branch premain --depth 1 https://github.com/openjdk/ley
 WORKDIR "/leyden"
 #TODO: explore with more configuration tuning, e.g. --enable-jvm-feature-cds --disable-jvm-feature-epsilongc --disable-jvm-feature-management --disable-jvm-feature-parallelgc --enable-jvm-feature-services --enable-jvm-feature-jvmti --disable-jvm-feature-jvmci --disable-jvm-feature-vm-structs --disable-jvm-feature-jni-check --disable-jvm-feature-zero --disable-jvm-feature-zgc --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments
 #TODO experiment also with JVM feature link-time-opt
-RUN bash configure --with-jvm-variants=custom --with-jvm-features=cds,compiler1,compiler2,g1gc,jfr,jni-check,jvmci,jvmti,management,services --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments
+RUN bash configure --with-jvm-variants=custom --with-jvm-features=cds,compiler1,compiler2,g1gc,serialgc,jfr,jni-check,jvmci,jvmti,management,services --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments
 #TODO: use also configure --with-classpath, modules, jlink
 RUN make images
 WORKDIR "/leyden/build/linux-x86_64-server-release/images/jdk"
