@@ -6,4 +6,4 @@ USER 1001
 
 # -Djdk.console=java.basebroken is useful because of https://bugs.openjdk.org/browse/JDK-8333794
 # -XX:+UseG1GC because we need to disable ergonomics and consistently use the same GC across CDS archives vs runtime, at any memory size we're testing with.
-ENTRYPOINT ["java", "-Dquarkus.http.host=0.0.0.0", "-Djdk.console=java.basebroken", "-XX:+UseG1GC", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
+ENTRYPOINT ["java", "-Dquarkus.http.host=0.0.0.0", "-Djdk.console=java.basebroken", "-XX:+UseG1GC", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory", "-jar", "target/quarkus-app/quarkus-run.jar"]
