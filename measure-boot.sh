@@ -15,6 +15,9 @@ measure() {
     
     # Options such as cpuset-mems=0 might require some extra system settings; see: https://fossies.org/linux/podman/troubleshooting.md
     podman run --pull=never --read-only --rm -d -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement $CONTAINER > /dev/null
+
+    # For experiments:
+    # podman run --pull=never --read-only --rm -it -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement localhost/leyden-build:latest
     
     until [ -f startedTimestamp ]
     do
