@@ -16,7 +16,8 @@ buildah build --cache-ttl=480h --pull=missing --layers -f BaselineBootstrap -t b
 
 #Bootstrap the Quarkus app using the CDS+Leyden archives:
 #podman run -it localhost/leyden-build:latest
-echo "Now run>  podman run -it localhost/leyden-build:latest"
+echo "Now to test the Leyden based app, run>  podman run --rm -it localhost/leyden-build:latest"
+echo "Now to test the standard JVM app, run>  podman run --rm -it localhost/baseline-boot:latest"
 
 #fedorafull=$(buildah build --cache-ttl=480h --pull=missing --layers -f BeefyContainerfile -t fedora-full .)
 
