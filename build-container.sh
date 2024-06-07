@@ -11,12 +11,13 @@ buildah build --cache-ttl=480h --pull=missing --layers -f FedoraWithDevTools -t 
 
 #Build Leyden JDK, latest from premain branch:
 buildah build --cache-ttl=480h --pull=missing --layers -f LeydenBuildContainerfile -t leyden-build .
-
+buildah build --cache-ttl=480h --pull=missing --layers -f LatestJDKBuildContainerfile -t latestjdk-build .
 buildah build --cache-ttl=480h --pull=missing --layers -f BaselineBootstrap -t baseline-boot .
 
 #Bootstrap the Quarkus app using the CDS+Leyden archives:
 #podman run -it localhost/leyden-build:latest
 echo "Now to test the Leyden based app, run>  podman run --rm -it localhost/leyden-build:latest"
+echo "Now to test the latest JDK 23 snapshot from https://github.com/openjdk/jdk , run>  podman run --rm -it localhost/latestjdk-build:latest"
 echo "Now to test the standard JVM app, run>  podman run --rm -it localhost/baseline-boot:latest"
 
 #fedorafull=$(buildah build --cache-ttl=480h --pull=missing --layers -f BeefyContainerfile -t fedora-full .)

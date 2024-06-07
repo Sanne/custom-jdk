@@ -1,0 +1,20 @@
+FROM localhost/fedora-with-dev:latest
+WORKDIR "/"
+# The "rand1" option should have no impact: useful to invalidate this line from various local build caches.
+RUN git clone -o rand1 --branch jdk23 --depth 1 https://github.com/openjdk/jdk.git
+WORKDIR "/jdk"
+RUN bash configure --with-jvm-variants=custom --with-jvm-features=cds,compiler1,compiler2,g1gc,serialgc,jfr,jni-check,jvmci,jvmti,management,services --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments
+RUN make images
+WORKDIR "/jdk/build/linux-x86_64-server-release/images/jdk"
+ENTRYPOINT ["/jdk/build/linux-x86_64-server-release/images/jdk/bin/java", "-version"]
+
+FROM localhost/fedora-with-dev:latest
+COPY --from=0 /jdk/build/linux-x86_64-custom-release/images/jdk /latest-openjdk
+WORKDIR "/quarkus-boot-measure"
+
+EXPOSE 8080
+USER 1001
+
+# -XX:+UseG1GC because we need to disable ergonomics and consistently use the same GC across CDS archives vs runtime, at any memory size we're testing with.
+# For diagnostics might want to use also -Xlog:cds -Xlog:scc :
+ENTRYPOINT ["/latest-openjdk/bin/java", "-XX:+UseG1GC", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]

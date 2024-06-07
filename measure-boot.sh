@@ -35,3 +35,4 @@ measure() {
 
 measure "localhost/leyden-build:latest"
 measure "localhost/baseline-boot:latest"
+measure "localhost/latestjdk-build:latest"
