@@ -13,9 +13,8 @@ measure() {
     
     startTimeMilliseconds=$(($(date --utc +%s%N)/1000000))
     
-    # See also: https://fossies.org/linux/podman/troubleshooting.md
-    # TODO: experimenbt with --cpuset-mems=0 --memory 1000m
-    podman run --pull=never --read-only --rm -d -p 8080:8080 --cpus 4 --name measurement $CONTAINER
+    # Options such as cpuset-mems=0 might require some extra system settings; see: https://fossies.org/linux/podman/troubleshooting.md
+    podman run --pull=never --read-only --rm -d -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement $CONTAINER
     
     until [ -f startedTimestamp ]
     do
