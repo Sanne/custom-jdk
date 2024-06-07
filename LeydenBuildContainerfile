@@ -21,5 +21,6 @@ WORKDIR "/quarkus-boot-measure"
 EXPOSE 8080
 USER 1001
 
-#For diagnostics might want to use also -Xlog:cds -Xlog:scc :
-ENTRYPOINT ["/leyden-openjdk/bin/java", "-XX:CacheDataStore=/leyden-openjdk/quarkus-generic-cds.cds", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
+# -Djdk.console=java.basebroken is useful because of https://bugs.openjdk.org/browse/JDK-8333794
+# For diagnostics might want to use also -Xlog:cds -Xlog:scc :
+ENTRYPOINT ["/leyden-openjdk/bin/java", "-Djdk.console=java.basebroken", "-XX:CacheDataStore=/leyden-openjdk/quarkus-generic-cds.cds", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
