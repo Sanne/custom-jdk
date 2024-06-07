@@ -14,17 +14,15 @@ measure() {
     startTimeMilliseconds=$(($(date --utc +%s%N)/1000000))
     
     # Options such as cpuset-mems=0 might require some extra system settings; see: https://fossies.org/linux/podman/troubleshooting.md
-    podman run --pull=never --read-only --rm -d -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement $CONTAINER
+    podman run --pull=never --read-only --rm -d -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement $CONTAINER > /dev/null
     
     until [ -f startedTimestamp ]
     do
         sleep 1
     done
-    echo "Waiting ..."
-    sleep 100 
     
-    podman rm -f measurement > /dev/null
     finishTString=$(cat startedTimestamp)
+    forceClean
     #echo "Just before start timestamp: $startTimeMilliseconds"
     #echo "Bootstrap complete timestamp: $finishTString"
     
