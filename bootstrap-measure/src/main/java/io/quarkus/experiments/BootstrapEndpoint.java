@@ -1,12 +1,7 @@
 package io.quarkus.experiments;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 @Path("/")
 public class BootstrapEndpoint {
@@ -14,7 +9,8 @@ public class BootstrapEndpoint {
     @GET
     @Path("/currenttime")
     public String timestamp() {
-        return new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
+        //Just print the milliseconds from epoch as it simplifies delta computation.
+        return "" + System.currentTimeMillis();
     }
 
     @GET
