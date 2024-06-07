@@ -12,7 +12,7 @@ WORKDIR "/leyden/build/linux-x86_64-server-release/images/jdk"
 ENTRYPOINT ["/leyden/build/linux-x86_64-server-release/images/jdk/bin/java", "-version"]
 
 FROM localhost/fedora-with-dev:latest
-COPY --from=0 /leyden/build/linux-x86_64-server-release/images/jdk /leyden-openjdk
+COPY --from=0 /leyden/build/linux-x86_64-custom-release/images/jdk /leyden-openjdk
 WORKDIR "/quarkus-standard-warmup"
 RUN ./produce-cds-archive.sh
 RUN ls /leyden-openjdk
