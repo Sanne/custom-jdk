@@ -42,6 +42,6 @@ measure() {
     echo "Container '$SHORT_CONTAINERNAME' completed bootstrap in $deltaMilliseconds milliseconds"
 }
 
-measure "leyden-build"
-measure "baseline-boot"
-measure "latestjdk-build"
+measure "jdk23-leyden-build"
+measure "fedora-standard"
+measure "jdk23-build"
