@@ -6,8 +6,8 @@ WORKDIR "/leyden"
 RUN bash configure --with-jvm-variants=custom --with-jvm-features=cds,compiler1,compiler2,g1gc,serialgc,jfr,jvmti,services,management,shenandoahgc,link-time-opt --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments --with-debug-level=release --disable-full-docs --disable-warnings-as-errors
 #TODO: use also configure --with-classpath, modules, jlink
 RUN make images
-WORKDIR "/leyden/build/linux-x86_64-server-release/images/jdk"
-ENTRYPOINT ["/leyden/build/linux-x86_64-server-release/images/jdk/bin/java", "-version"]
+WORKDIR "/leyden/build/linux-x86_64-custom-release/images/jdk"
+ENTRYPOINT ["/leyden/build/linux-x86_64-custom-release/images/jdk/bin/java", "-version"]
 
 FROM localhost/fedora-with-dev:latest
 COPY --from=0 /leyden/build/linux-x86_64-custom-release/images/jdk /leyden-openjdk
