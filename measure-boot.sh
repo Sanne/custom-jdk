@@ -27,11 +27,18 @@ measure() {
     # For experiments:
     # podman run --pull=never --read-only --rm -it -p 8080:8080 --cpus 4 --cpuset-mems=0 --memory 2000m --name measurement localhost/leyden-build:latest
     
+    #JAVA_PID=$(podman exec -it $TEMP_INTANCE_NAME bash -c "ps -ef | grep java | head -n 1 | awk '{print \$2}'")
+    #echo "Found Java process with PID: $JAVA_PID"
+    #Not using this variable because it is always one. To check back later.
+
+    podman exec -it $TEMP_INTANCE_NAME bash -c "jcmd 1 VM.native_memory baseline scale=MB" > /dev/null
+    podman exec -it $TEMP_INTANCE_NAME bash -c "jcmd 1 VM.native_memory detail scale=MB" >> "$TEMP_INTANCE_NAME"_NMT.log
     until [ -f startedTimestamp ]
     do
         sleep 1
+        #Get memory
+        podman exec -it $TEMP_INTANCE_NAME bash -c "jcmd 1 VM.native_memory detail scale=MB" >> "$TEMP_INTANCE_NAME"_NMT.log
     done
-    #TODO get memory data sleep 100
     
     finishTString=$(cat startedTimestamp)
     forceClean $TEMP_INTANCE_NAME
@@ -40,6 +47,10 @@ measure() {
     
     deltaMilliseconds=$((finishTString - startTimeMilliseconds))
     echo "Container '$SHORT_CONTAINERNAME' completed bootstrap in $deltaMilliseconds milliseconds"
+    echo "It used the following native memory:"
+    #cat "$TEMP_INTANCE_NAME"_NMT.log | head -n 62 | tail -n 56
+    cat  "$TEMP_INTANCE_NAME"_NMT.log | head -n 7 | tail -n 1
+    rm "$TEMP_INTANCE_NAME"_NMT.log
 }
 
 measure "jdk23-leyden-build"

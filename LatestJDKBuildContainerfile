@@ -17,4 +17,4 @@ USER 1001
 
 # -XX:+UseG1GC because we need to disable ergonomics and consistently use the same GC across CDS archives vs runtime, at any memory size we're testing with.
 # For diagnostics might want to use also -Xlog:cds -Xlog:scc :
-ENTRYPOINT ["/latest-openjdk/bin/java", "-XX:+UseG1GC", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
+ENTRYPOINT ["/latest-openjdk/bin/java", "-XX:NativeMemoryTracking=detail", "-XX:+UseG1GC", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
