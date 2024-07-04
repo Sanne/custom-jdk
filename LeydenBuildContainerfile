@@ -10,6 +10,7 @@ WORKDIR "/leyden/build/linux-x86_64-custom-release/images/jdk"
 ENTRYPOINT ["/leyden/build/linux-x86_64-custom-release/images/jdk/bin/java", "-version"]
 
 FROM localhost/fedora-with-dev:latest
+ENV EXTRAPARAMS=$EXTRAPARAMS
 COPY --from=0 /leyden/build/linux-x86_64-custom-release/images/jdk /leyden-openjdk
 WORKDIR "/quarkus-standard-warmup"
 RUN ./produce-cds-archive.sh
@@ -22,4 +23,4 @@ USER 1001
 # -Djdk.console=java.basebroken is useful because of https://bugs.openjdk.org/browse/JDK-8333794
 # -XX:+UseG1GC because we need to disable ergonomics and consistently use the same GC across CDS archives vs runtime, at any memory size we're testing with.
 # For diagnostics might want to use also -Xlog:cds -Xlog:scc :
-ENTRYPOINT ["/leyden-openjdk/bin/java", "-XX:NativeMemoryTracking=detail", "-Djdk.console=java.basebroken", "-XX:+UseG1GC", "-XX:CacheDataStore=/leyden-openjdk/quarkus-generic-cds.cds", "-Dquarkus.http.host=0.0.0.0", "-Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "target/quarkus-app/quarkus-run.jar"]
+ENTRYPOINT /leyden-openjdk/bin/java $EXTRAPARAMS -Djdk.console=java.basebroken -XX:+UseG1GC -XX:CacheDataStore=/leyden-openjdk/quarkus-generic-cds.cds -Dquarkus.http.host=0.0.0.0 -Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory -Djava.util.logging.manager=org.jboss.logmanager.LogManager -jar target/quarkus-app/quarkus-run.jar
