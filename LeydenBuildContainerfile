@@ -3,14 +3,14 @@ WORKDIR "/"
 # The "rand1" option should have no impact: useful to invalidate this line from various local build caches.
 RUN git clone -o rand4 --branch premain --depth 1 https://github.com/openjdk/leyden.git
 WORKDIR "/leyden"
-RUN bash configure --with-jvm-variants=custom --with-jvm-features=cds,compiler1,compiler2,g1gc,serialgc,jfr,jvmti,services,management,shenandoahgc,link-time-opt --enable-generate-classlist --disable-manpages --with-vendor-name=Experiments --with-debug-level=release --disable-full-docs --disable-warnings-as-errors
-#TODO: use also configure --with-classpath, modules, jlink
-RUN make images
-WORKDIR "/leyden/build/linux-x86_64-custom-release/images/jdk"
-ENTRYPOINT ["/leyden/build/linux-x86_64-custom-release/images/jdk/bin/java", "-version"]
+COPY --chown=1001 "leyden-buildscripts/" "/leyden/"
+RUN bash ./build-minimal-leyden.sh
+RUN bash ./gen-jlinked-jvm.sh
+WORKDIR "/leyden/custom-jvm/"
+ENTRYPOINT ["/leyden/custom-jvm/bin/java", "-version"]
 
 FROM localhost/fedora-with-dev:latest
-COPY --from=0 /leyden/build/linux-x86_64-custom-release/images/jdk /leyden-openjdk
+COPY --from=0 /leyden/custom-jvm /leyden-openjdk
 WORKDIR "/quarkus-standard-warmup"
 RUN ./produce-cds-archive.sh
 RUN ls /leyden-openjdk
