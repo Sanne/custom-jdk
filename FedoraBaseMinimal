@@ -1,4 +1,4 @@
 # Base Fedora minimal, with updates
-FROM registry.fedoraproject.org/fedora:42
+FROM registry.fedoraproject.org/fedora-minimal:42
 RUN dnf -y update
 # Not cleaning up the dnf cache to speedup the build of derived images

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-#Build the fedora base image, an up to date Fedora 40 with no extras:
+#Build the fedora base image, an up to date Fedora with no extras:
 buildah build --cache-ttl=480h --pull=missing --layers -f FedoraBase -t fedora-base .
+buildah build --cache-ttl=480h --pull=missing --layers -f FedoraBaseMinimal -t fedora-base-minimal .
 
 #Build the "fedora with dev tools" base image:
 buildah build --cache-ttl=480h --pull=missing --layers -f FedoraWithDevTools -t fedora-with-dev .

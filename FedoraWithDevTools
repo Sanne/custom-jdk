@@ -1,14 +1,17 @@
 # This particular image is only an intermediate build step which we use to build the final containers:
 # therefore it's not optimised for size but for our convenience.
 FROM localhost/fedora-base:latest
-RUN dnf -y install git maven java-22-openjdk-devel gcc autoconf automake binutils glibc-devel make libtool pkgconf unzip zip gcc-c++ alsa-lib-devel cups-devel fontconfig-devel libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel --nodocs
-#Intentionally not cleaning the dnf metadata to allow more efficient follow-up operations
+RUN dnf -y install git maven file java-24-openjdk-devel gcc autoconf automake binutils glibc-devel make libtool pkgconf unzip zip gcc-c++ alsa-lib-devel cups-devel fontconfig-devel libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel diffutils gawk --nodocs --setopt=install_weak_deps=False
+# Intentionally not cleaning the dnf metadata to allow more efficient follow-up operations
 COPY --chown=1001 "bootstrap-measure/" "/quarkus-boot-measure/"
 WORKDIR "/quarkus-boot-measure"
+# Set environment variables to use the installed JDK24, as it's not the default one:
+ENV JAVA_HOME=/usr/lib/jvm/java-24-openjdk
+ENV PATH="$JAVA_HOME/bin:${PATH}"
 # This is to fill the Maven cache with core artifacts from this particular version of Quarkus we're targeting
 RUN mvn package
 COPY --chown=1001 "standard-warmup/" "/quarkus-standard-warmup/"
 WORKDIR "/quarkus-standard-warmup"
 RUN mvn package
-#Now reset the workdir to default, otherwise it might be confusing when maintaining downstream builds:
+# Now reset the workdir to default, otherwise it might be confusing when maintaining downstream builds:
 WORKDIR "/"

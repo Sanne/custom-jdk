@@ -5,7 +5,7 @@ rm -Rf build
 
 #Shared flags for both builds:
 #Local custom: --with-num-cores=12 --with-memory-size=55000 --with-boot-jdk=/opt/jdk-22+33 
-COMMON="--with-jvm-variants=custom --disable-manpages --with-vendor-name=Experiments --disable-full-docs"
+COMMON="--with-jvm-variants=custom --with-vendor-name=Experiments --disable-full-docs"
 
 #These are the features selected for stage1 build: subsequent stages might trim this selection further:
 STAGE1_FEATURES=cds,compiler1,compiler2,g1gc,serialgc,jfr,jvmti,management,services
